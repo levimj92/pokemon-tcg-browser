@@ -1,0 +1,125 @@
+@import '~@angular/material/theming';
+
+// MATERIAL THEME
+@include mat-core();
+
+$app-primary: mat-palette($mat-red);
+$app-accent: mat-palette($mat-light-blue, A200, A100, A400);
+$app-warn: mat-palette($mat-deep-orange);
+$app-theme: mat-light-theme((
+  color: (
+    primary: $app-primary,
+    accent: $app-accent,
+    warn: $app-warn,
+  )
+));
+
+@include angular-material-theme($app-theme);
+
+// POKEMON FONTS
+$pokemon-fonts: 'hollow', 'solid', 'unown';
+
+@mixin setup-font($type) {
+  @font-face {
+    font-family: pokemon-#{$type};
+    src: url('./assets/pokemon-#{$type}.ttf');
+  }
+}
+
+@mixin pokemon-font($type) {
+  @include setup-font($type);
+  .pokemon-font-#{$type} {
+    font-family: pokemon-#{$type} !important;
+  }
+}
+
+@each $font in $pokemon-fonts {
+  @include pokemon-font($font);
+}
+
+//ENERGIES
+$pokemon-energy-sprite-url: url('./assets/energy-types-sprites.png');
+$energy-sprite-width: 25px;
+$energy-sprite-height: 25px;
+$energy-sprite-gut: 0 3px;
+$energy-chip-gut: 3px;
+$energy-chip-width: 80px;
+$energy-chip-height: 25px;
+$grass-energy: ('x': -1, 'y': -2, 'name': 'Grass', 'color': #7db809);
+$fire-energy: ('x': 0, 'y': 0, 'name': 'Fire', 'color': #e24343);
+$water-energy: ('x': -3, 'y': -2, 'name': 'Water', 'color': #5bc7e5);
+$lightning-energy: ('x': -1, 'y': -1, 'name': 'Lightning', 'color': #fab536);
+$fighting-energy: ('x': -2, 'y': -1, 'name': 'Fighting', 'color': #ff501f);
+$psychic-energy: ('x': -3, 'y': -1, 'name': 'Psychic', 'color': #a65e9b);
+$colorless-energy: ('x': -1, 'y': 0, 'name': 'Colorless', 'color': #e4d6d0);
+$darkness-energy: ('x': 0, 'y': -2, 'name': 'Darkness', 'color': #2b2e2b);
+$metal-energy: ('x': -3, 'y': 0, 'name': 'Metal', 'color': #8a776e);
+$dragon-energy: ('x': 0, 'y': -1, 'name': 'Dragon', 'color': #c6a214);
+$fairy-energy: ('x': -2, 'y': 0, 'name': 'Fairy', 'color': #e03a83);
+
+$energies-map: $grass-energy,
+$fire-energy,
+$water-energy,
+$lightning-energy,
+$fighting-energy,
+$psychic-energy,
+$colorless-energy,
+$darkness-energy,
+$metal-energy,
+$dragon-energy,
+$fairy-energy;
+
+@mixin energy($type) {
+  @if ($type == 'null') {
+    @error "You need to provide an energy type";
+  }
+  background-position: $energy-sprite-width * map-get($type, 'x') $energy-sprite-height * map-get($type, 'y');
+  background-image: $pokemon-energy-sprite-url;
+  width: $energy-sprite-width;
+  height: $energy-sprite-height;
+  display: inline-block;
+  margin: $energy-sprite-gut;
+}
+
+@each $energy in $energies-map {
+  .#{map-get($energy, 'name')}-icon {
+    @include energy($energy);
+  }
+
+  .#{map-get($energy, 'name')}-color {
+    color: map-get($energy, 'color');
+  }
+
+  .#{map-get($energy, 'name')}-background-color {
+    background-color: map-get($energy, 'color');
+  }
+
+  .#{map-get($energy, 'name')}-chip {
+    width: $energy-chip-width;
+    height: $energy-chip-height;
+    margin: $energy-chip-gut;
+    padding: 3px;
+    color: #000;
+    border: 1px solid #000;
+    border-radius: 15px;
+    background-color: map-get($energy, 'color');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:before {
+      content: map-get($energy, 'name')
+    }
+  }
+}
+
+// GLOBAL STYLE
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-size: 14px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

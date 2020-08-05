@@ -1,0 +1,26 @@
+@import '~@angular/material/theming';
+
+:host {
+  .card {
+    img {
+      height: 342px;
+      width: 245px;
+      cursor: pointer;
+      border-radius: 12px;
+      @include mat-elevation-transition();
+
+      &:hover {
+        @include mat-elevation(5);
+      }
+    }
+
+    .card-name {
+      cursor: pointer;
+      color: rgba(#000, 0.73);
+      font-size: 1rem;
+      &:hover {
+        color: rgba(#000, 0.53);
+      }
+    }
+  }
+}

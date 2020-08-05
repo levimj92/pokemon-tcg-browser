@@ -1,0 +1,82 @@
+<app-cards-toolbar></app-cards-toolbar>
+<div *ngIf="card$ | async as card; else loading" class="row p-3">
+  <div class="col-12 col-md-4 align-self-center">
+    <img [src]="card.imageUrlHiRes" [alt]="card.name">
+  </div>
+  <mat-divider class="d-none d-md-block" [vertical]="true"></mat-divider>
+  <div class="col-12 col-md d-flex flex-column">
+    <div class="mt-2 mt-md-0 poke-header d-flex flex-row align-items-center justify-content-start flex-wrap">
+      <span>{{card.name}}</span>
+      <span class="ml-2 align-self-end font-italic">({{card.id}})</span>
+      <span *ngFor="let type of card.types" [class]="type + '-chip mx-2'"></span>
+    </div>
+    <div class="my-4 d-flex flex-row align-items-center justify-content-start flex-wrap">
+      <div class="col-auto">
+        <h2 class="font-weight-bold">HP</h2>
+        <span class="data-size">{{card.hp}}</span>
+      </div>
+      <div class="col-auto" *ngIf="card.weaknesses as weaknesses">
+        <h2 class="font-weight-bold">Weakness</h2>
+        <div class="energy flex-wrap d-flex flex-row align-items-center justify-content-around">
+          <ng-container *ngFor="let weakness of weaknesses">
+            <div [class]="weakness.type+'-icon'"></div>
+            <span class="data-size">{{weakness.value}}</span>
+          </ng-container>
+        </div>
+      </div>
+      <div class="col-auto" *ngIf="card.resistances as resistances">
+      <h2 class="font-weight-bold">Resistances</h2>
+      <div class="energy flex-wrap d-flex flex-row align-items-center justify-content-around">
+        <ng-container *ngFor="let resistance of resistances">
+          <div [class]="resistance.type+'-icon'"></div>
+          <span class="data-size">{{resistance.value}}</span>
+        </ng-container>
+      </div>
+    </div>
+      <div class="col-auto" *ngIf="card.retreatCost as retreat">
+        <h2 class="font-weight-bold">Retreat</h2>
+        <div class="energy flex-wrap d-flex flex-row align-items-center justify-content-around">
+          <ng-container *ngFor="let energy of retreat">
+            <div [class]="energy+'-icon'"></div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+    <mat-expansion-panel *ngIf="card.ability as ability" [expanded]="true" class="mt-3 mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ability.type}}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <h2>{{ability.name}}</h2>
+      <p>{{ability.text}}</p>
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="true" class="mt-3 mat-elevation-z0">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Attacks
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ng-container *ngFor="let attack of card.attacks; last as last">
+        <div class="d-flex flex-row align-items start justify-content-start">
+          <div class="energy flex-wrap d-flex flex-row align-items-center justify-content-around">
+            <div *ngFor="let energy of attack.cost" [class]="energy+'-icon'"></div>
+          </div>
+          <div class="col-5 d-flex flex-column">
+            <h2>{{attack.name}}</h2>
+            <p>{{attack.text}}</p>
+          </div>
+          <div class="col-auto d-flex flex-column align-items-center justify-content-center">
+            <span class="attack-size">{{attack.damage}}</span>
+          </div>
+        </div>
+        <mat-divider *ngIf="!last" class="my-2"></mat-divider>
+      </ng-container>
+    </mat-expansion-panel>
+  </div>
+</div>
+<ng-template #loading>
+  <div class="mt-5 d-flex align-items-center justify-content-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>

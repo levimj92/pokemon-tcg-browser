@@ -1,0 +1,27 @@
+<app-cards-toolbar></app-cards-toolbar>
+<div class="p-3">
+  <mat-form-field [appearance]="'standard'" class="w-100">
+    <mat-label>Pesquisar Pokémon</mat-label>
+    <input matInput type="text" [formControl]="searchControl">
+    <mat-hint>Digite o nome de um ou mais pokémons separados por |</mat-hint>
+    <mat-error></mat-error>
+  </mat-form-field>
+</div>
+<ng-container *ngIf="cardsList$ | async as cardsList; else loading">
+  <div class="row p-2 align-items-center justify-content-around">
+    <div *ngFor="let card of cardsList; trackBy: cardsTrackByFn" class="card col-auto p-0 m-2">
+      <img [routerLink]="[card.id]" class="mat-elevation-z1" [src]="card.imageUrl" [alt]="card.name">
+      <div [routerLink]="[card.id]" class="card-name d-flex flex-row align-items-center justify-content-center">
+        <span *ngFor="let type of card.types" [class]="type + '-chip'"></span>
+        {{card.name}} ({{card.id}})
+      </div>
+    </div>
+  </div>
+  <button class="m-2" mat-button (click)="loadMoreCards()">Load More...</button>
+</ng-container>
+
+<ng-template #loading>
+  <div class="mt-5 d-flex align-items-center justify-content-center">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-template>
